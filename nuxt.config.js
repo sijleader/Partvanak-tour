@@ -1,3 +1,5 @@
+const nodeExternals = require('webpack-node-externals')
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -15,7 +17,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: '@/plugins/vue-html2pdf', mode: 'client' }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -53,4 +55,14 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  extend(config, { isServer }) {
+    if (isServer) {
+      config.externals = [
+        nodeExternals({
+          whitelist: [/\.(?!(?:js|json)$).{1,5}$/i, /^vue-awesome/],
+        }),
+      ]
+    }
+  },
 }
